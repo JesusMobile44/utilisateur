@@ -1,10 +1,15 @@
 public class Utilisateur {
-    String prenom;
-    String nom;
-    String nomUtil;
-    String password;
-    String genre;
-    int age;
+    private String prenom;
+    private String nom;
+    private String nomUtil;
+    private String password;
+    private String genre;
+    private String age;
+
+
+    public Utilisateur() {
+
+    }
 
     public String getPrenom() {
         return prenom;
@@ -46,11 +51,11 @@ public class Utilisateur {
         this.genre = genre;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 }
