@@ -22,17 +22,18 @@ import java.util.List;
 
 
 public class Main extends Application {
-    private ArrayList<Utilisateur> listeUser = new ArrayList<>();
-    private HashMap hashMap;
+
+    private static HashMap<String,Utilisateur> hashMap = new HashMap();
+
     public static void main(String[] args) {
         launch(args);
     }
 
+
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
-        hashMap = new HashMap<String,Utilisateur>();
 
-        load(listeUser);
+        load();
         File csvFile = new File("bingCSV.csv");
         if (!csvFile.exists())
             throw new FileNotFoundException("Le fichier n'existe pas");
@@ -86,7 +87,18 @@ public class Main extends Application {
         Scene chargement = new Scene(chargeGroup);
 
         connecterButton.setOnAction((event) -> {
-            primaryStage.setScene(chargement);
+            if (verfication(nomUtil.getText())==true){
+                if (hash(password.getText()).equals(hashMap.get(nomUtil.getText()).getPassword())){
+                    primaryStage.setScene(chargement);
+                }
+                else{
+                    System.out.println("le mot de passe ne correspond pas");
+                }
+            }
+            else{
+                System.out.println("le nom s'utilisateur est incorrecte");
+            }
+
                 }
         );
         //=======================================================
@@ -149,7 +161,7 @@ public class Main extends Application {
         effacer.setTranslateY(450);
         Button retour = new Button();
         retour.setText("Retour");
-        retour.setTranslateX(420);
+        retour.setTranslateX(440);
         retour.setTranslateY(450);
 
         Label labelPrenom = new Label("Prénom");
@@ -209,6 +221,9 @@ public class Main extends Application {
             else if (!checkbox.isSelected()){
                 erreurInscri.setText("Vous n'avez pas acceptez les conditions d'utilisations");
             }
+            else if (verfication(nomUtilNew.getText())==true){
+                erreurInscri.setText("Ce nom d'utilisateur est déjâ pris");
+            }
             if( erreurInscri.getText().equals("")){
                 Utilisateur temp = new Utilisateur();
                 temp.setPrenom(prenom.getText());
@@ -261,7 +276,6 @@ public class Main extends Application {
         primaryStage.show();
     }
     public static String hash(String chaine){
-
         try{
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] encodedhash = digest.digest(
@@ -274,21 +288,39 @@ public class Main extends Application {
                 hexString.append(hex);
                 return hexString.toString();
             }
-        }catch (Exception e){
+        }
+        catch (Exception e){
             System.out.println("Hashing error");
         }
         return null;
     }
-    public static boolean verfication(String key){
+    public boolean connexion(String nomUtil,String passwordHash){
         boolean pareil = false;
-        for (int i=0;i<)
+
+        return pareil;
     }
-    public static void load(ArrayList<Utilisateur> listeUser){
+
+    public boolean verfication(String key){
+        boolean pareil = false;
+        if (hashMap.containsKey(key)){
+            pareil = true;
+        }
+        return pareil;
+    }
+
+    public void load(){
         try{
             List<String> toutesLigne = Files.readAllLines(Paths.get("bingCSV.csv"));
+            for (int i=0;i<toutesLigne.size();i++){
+                String grosString = toutesLigne.get(i);
+                String[] listeSubString;
+                listeSubString = grosString.split(",");
+                Utilisateur temp = new Utilisateur(listeSubString[0],listeSubString[1],listeSubString[2],listeSubString[3],listeSubString[4],listeSubString[5]);
+                hashMap.put(listeSubString[2],temp);
+            }
         }
         catch(Exception exception){
-
+            System.out.println("Impossible de charger le fichier");
         }
     }
 }

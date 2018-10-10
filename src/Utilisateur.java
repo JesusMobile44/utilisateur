@@ -7,9 +7,15 @@ public class Utilisateur {
     private String age;
 
 
-    public Utilisateur() {
-
+    public Utilisateur(String prenom, String nom, String nomUtil, String password, String genre, String age) {
+        this.prenom = prenom;
+        this.nom = nom;
+        this.nomUtil = nomUtil;
+        this.password = password;
+        this.genre = genre;
+        this.age = age;
     }
+    public Utilisateur(){}
 
     public String getPrenom() {
         return prenom;
